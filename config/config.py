@@ -5,12 +5,12 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 
 # Default values
 default_config = {
-    "num_leds": 72,
-    "brightness": 0.1,
-    "max_brightness": 0.5,
-    "color_scheme": "default",
-    "behavior": "full_react",
-    "use_simulator": False
+    "num_leds": 72,  # Number of LEDs on the strip.
+    "brightness": 0.1,  # Set initial brightness. Default is 10%.
+    "max_brightness": 0.1,  # Max brightness. Default is 10%. Warning: Calculate how much power you have to run the strips.
+    "color_scheme": "default",  # Set color scheme.
+    "behavior": "full_react",  # Set behavior.
+    "use_simulator": False  # Use terminal simulation of LED lights. Hardware strip by default.
 }
 
 # In-memory config dictionary
