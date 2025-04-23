@@ -1,7 +1,9 @@
 import json
 import os
 import socket
-from config.config import config
+from config.config import load_config, config
+
+load_config()
 
 if config.get("use_simulator", True):
     from logic.leds import TerminalStrip as Strip
