@@ -2,7 +2,9 @@ import json
 import os
 import socket
 from logic.leds import HardwareStrip
-from config.config import config
+from config.config import load_config, config
+
+load_config()
 
 SOCKET_PATH = "/tmp/led.sock"
 
