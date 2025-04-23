@@ -1,10 +1,12 @@
 import json
 import os
 import socket
-from logic.leds import HardwareStrip
-from config.config import load_config, config
+from config.config import config
 
-load_config()
+if config.get("use_simulator", True):
+    from logic.leds import TerminalStrip as Strip
+else:
+    from logic.leds import HardwareStrip as Strip
 
 SOCKET_PATH = "/tmp/led.sock"
 
@@ -12,12 +14,12 @@ SOCKET_PATH = "/tmp/led.sock"
 if os.path.exists(SOCKET_PATH):
     os.remove(SOCKET_PATH)
 
-# Initialize the real LED strip
-led_strip = HardwareStrip(config["num_leds"], config["brightness"])
+# Initialize the LED strip
+led_strip = Strip(config["num_leds"], config["brightness"])
 led_strip.fill((0, 0, 0))
 led_strip.show()
 
-print("🔌 LED runner is active and listening on socket...")
+print(f"🔌 LED runner ({'Simulator' if config.get('use_simulator') else 'Hardware'}) is active and listening on socket...")
 
 with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
     server.bind(SOCKET_PATH)
