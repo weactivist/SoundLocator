@@ -63,6 +63,8 @@ Example:
 poetry run uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
+UI available at: http://<ip_address>/docs/:8000
+
 ## 🧑‍💻 To pull future updates
 ```
 git pull
