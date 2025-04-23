@@ -41,8 +41,11 @@ curl -sSL https://install.python-poetry.org | python3 -
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
+`sudo nano /root/.bashrc` and add to end of file: `export PATH="/home/pi/.local/bin:$PATH"`
+
 5. Install dependencies
 ```bash
+poetry run pip install RPi.GPIO
 poetry install --with rpi
 ```
 6. Edit config (available settings can be found in `config/config.py`)
@@ -52,11 +55,11 @@ nano config/config.json
 Example:
 ```json
 {
-    "num_leds": 72,
-    "brightness": 0.1,
-    "max_brightness": 0.1,
-    "color_scheme": "default",
-    "use_simulator": false
+    "num_leds": 72,  # Set to the number of LEDs on your strip
+    "brightness": 0.1, # Default brightness is 10%
+    "max_brightness": 0.1, # Warning: Calculate how many LEDs you can drive. Setting this too high can cause issues with your hardware.
+    "color_scheme": "default", # Set color scheme
+    "use_simulator": false # Use hardware LED strip
 }
 ```
 7. Run the app
