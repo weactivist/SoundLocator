@@ -41,7 +41,6 @@ curl -sSL https://install.python-poetry.org | python3 -
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
-`sudo nano /root/.bashrc` and add to end of file: `export PATH="/home/pi/.local/bin:$PATH"`
 
 5. Install dependencies
 ```bash
