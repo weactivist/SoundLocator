@@ -43,7 +43,7 @@ source ~/.bashrc
 ```
 5. Install dependencies
 ```bash
-poetry install
+poetry install --with rpi
 ```
 6. Edit config (available settings can be found in `config/config.py`)
 ```bash
@@ -55,7 +55,8 @@ Example:
     "num_leds": 72,
     "brightness": 0.1,
     "max_brightness": 0.1,
-    "color_scheme": "default"
+    "color_scheme": "default",
+    "use_simulator": false
 }
 ```
 7. Run the app
@@ -63,7 +64,7 @@ Example:
 poetry run uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-UI available at: http://<ip_address>/docs/:8000
+API docs available at: http://<ip_address>:8000/docs
 
 ## 🧑‍💻 To pull future updates
 ```

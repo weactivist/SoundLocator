@@ -11,6 +11,9 @@ except ImportError:
 
 class HardwareStrip(StripInterface):
     def __init__(self, num_leds, brightness):
+        if neopixel is None or board is None:
+            raise ImportError("❌ neopixel or board library not available. Make sure you're running on Raspberry Pi with proper hardware libraries installed.")
+
         self.num_leds = num_leds
         self.brightness = brightness
         self.strip = neopixel.NeoPixel(
