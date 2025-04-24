@@ -26,9 +26,3 @@ mypy = "^1.15.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[[tool.poetry.source]]
-name = "piwheels"
-url = "https://www.piwheels.org/simple"
-default = false
-secondary = true
