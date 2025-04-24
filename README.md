@@ -46,6 +46,8 @@ source ~/.bashrc
 ```bash
 poetry run pip install RPi.GPIO
 poetry install --with rpi
+sudo /home/pi/.local/bin/poetry add adafruit-circuitpython-neopixel rpi-ws281x
+sudo /home/pi/.local/bin/poetry run pip install RPi.GPIO
 ```
 6. Edit config (available settings can be found in `config/config.py`)
 ```bash

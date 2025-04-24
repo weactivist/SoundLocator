@@ -1,6 +1,7 @@
 import json
 import os
 import socket
+import time
 from config.config import load_config, config
 
 load_config()
@@ -22,6 +23,23 @@ led_strip.fill((0, 0, 0))
 led_strip.show()
 
 print(f"🔌 LED runner ({'Simulator' if config.get('use_simulator') else 'Hardware'}) is active and listening on socket...")
+
+def lightspeed_startup(strip):
+    length = strip.num_leds
+    center = length // 2
+    for i in range(center):
+        strip.set_pixel(center + i, (255, 255, 255))
+        strip.set_pixel(center - i - 1, (255, 255, 255))
+        strip.show()
+        time.sleep(0.02)
+    for i in range(length):
+        strip.set_pixel(i, (0, 0, 0))
+    strip.show()
+    print("🚀 Lightspeed jump sequence complete")
+
+
+# Run lightspeed jump on startup
+lightspeed_startup(led_strip)
 
 with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
     server.bind(SOCKET_PATH)
