@@ -26,40 +26,27 @@ led_strip.show()
 
 print(f"🔌 LED runner ({'Simulator' if config.get('use_simulator') else 'Hardware'}) is active and listening on socket...")
 
-def lightspeed_startup(strip):
+def onoff_sequence(strip, color):
     length = strip.num_leds
     center = length // 2
     for i in range(center):
-        strip.set_pixel(center + i, (255, 255, 255))
-        strip.set_pixel(center - i - 1, (255, 255, 255))
+        strip.set_pixel(center + i, (color, color, color))
+        strip.set_pixel(center - i - 1, (color, color, color))
         strip.show()
         time.sleep(0.02)
     # Fade out
-    for b in range(255, -1, -15):
+    for b in range(color, -1, -15):
         dim_color = (b, b, b)
         strip.fill(dim_color)
         strip.show()
         time.sleep(0.02)
+
+def lightspeed_startup(strip):
+    onoff_sequence(strip, 255)
     print("🚀 Lightspeed jump sequence complete")
 
 def shutdown_sequence(strip):
-    length = strip.num_leds
-    red = (150, 0, 0)
-    center = length // 2
-    for offset in range(center + 1):
-        if center + offset < length:
-            strip.set_pixel(center + offset, red)
-        if center - offset >= 0:
-            strip.set_pixel(center - offset, red)
-        strip.show()
-        time.sleep(0.02)
-    for b in range(150, -1, -15):
-        fade = (b, 0, 0)
-        strip.fill(fade)
-        strip.show()
-        time.sleep(0.03)
-    strip.fill((0, 0, 0))
-    strip.show()
+    onoff_sequence(strip, 150)
     print("💤 Vader's fade shutdown complete")
 
 def graceful_exit(signum, frame):
