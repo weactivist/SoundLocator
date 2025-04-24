@@ -2,6 +2,8 @@ import json
 import os
 import socket
 import time
+import signal
+import sys
 from config.config import load_config, config
 
 load_config()
@@ -37,9 +39,32 @@ def lightspeed_startup(strip):
         dim_color = (b, b, b)
         strip.fill(dim_color)
         strip.show()
-        time.sleep(0.03)
+        time.sleep(0.02)
     print("🚀 Lightspeed jump sequence complete")
 
+def shutdown_sequence(strip):
+    for pulse in range(3):
+        for b in range(0, 256, 30):
+            strip.fill((b, 0, 0))
+            strip.show()
+            time.sleep(0.02)
+        for b in range(255, -1, -30):
+            strip.fill((b, 0, 0))
+            strip.show()
+            time.sleep(0.02)
+    strip.fill((0, 0, 0))
+    strip.show()
+    print("💤 Shutdown sequence complete")
+
+def graceful_exit(signum, frame):
+    print("🚦 Shutting down gracefully...")
+    shutdown_sequence(led_strip)
+    if os.path.exists(SOCKET_PATH):
+        os.remove(SOCKET_PATH)
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, graceful_exit)
+signal.signal(signal.SIGTERM, graceful_exit)
 
 # Run lightspeed jump on startup
 lightspeed_startup(led_strip)
