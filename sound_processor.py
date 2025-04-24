@@ -35,7 +35,7 @@ def process_audio_stream():
         print("🎙️ Listening with arecord in stereo mode...")
         while True:
             try:
-                data = proc.stdout.read(2048)  # 1024 frames, 2 channels, 16-bit
+                data = proc.stdout.read(4096)  # 1024 frames, 2 channels, 16-bit
                 if not data:
                     continue
                 samples = np.frombuffer(data, dtype=np.int16)
