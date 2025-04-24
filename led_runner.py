@@ -32,9 +32,12 @@ def lightspeed_startup(strip):
         strip.set_pixel(center - i - 1, (255, 255, 255))
         strip.show()
         time.sleep(0.02)
-    for i in range(length):
-        strip.set_pixel(i, (0, 0, 0))
-    strip.show()
+    # Fade out
+    for b in range(255, -1, -15):
+        dim_color = (b, b, b)
+        strip.fill(dim_color)
+        strip.show()
+        time.sleep(0.03)
     print("🚀 Lightspeed jump sequence complete")
 
 
