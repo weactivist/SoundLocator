@@ -1,0 +1,14 @@
+# /etc/systemd/system/led-runner.service
+[Unit]
+Description=LED Runner Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/sudo /home/pi/.local/bin/poetry run python /home/pi/soundlocator/led_runner.py
+WorkingDirectory=/home/pi/soundlocator
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target

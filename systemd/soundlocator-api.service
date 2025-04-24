@@ -1,0 +1,16 @@
+# /etc/systemd/system/soundlocator-api.service
+[Unit]
+Description=SoundLocator FastAPI Service
+Requires=led-runner.service
+After=led-runner.service
+
+[Service]
+Type=simple
+ExecStartPre=/bin/bash -c 'while [ ! -e /tmp/led.sock ]; do sleep 0.5; done'
+ExecStart=/home/pi/.local/bin/poetry run uvicorn main:app --host 0.0.0.0 --port 8000
+WorkingDirectory=/home/pi/soundlocator
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target

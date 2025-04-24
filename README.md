@@ -61,10 +61,23 @@ Example:
     "use_simulator": false # Use hardware LED strip
 }
 ```
-7. Run the app
+7. Copy system files
 ```bash
-sudo python3 led_runner.py
-poetry run uvicorn main:app --host 0.0.0.0 --port 8000
+sudo cp systemd/led-runner.service /etc/systemd/system/
+sudo cp systemd/soundlocator-api.service /etc/systemd/system/
+```
+
+8. Reload systemd and enable services
+```
+sudo systemctl daemon-reload
+sudo systemctl enable led-runner.service
+sudo systemctl enable soundlocator-api.service
+```
+
+9. Start services
+```
+sudo systemctl start led-runner.service
+sudo systemctl start soundlocator-api.service
 ```
 
 API docs available at: http://<ip_address>:8000/docs
