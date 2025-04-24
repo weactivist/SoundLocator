@@ -30,23 +30,23 @@ def onoff_sequence(strip, color):
     length = strip.num_leds
     center = length // 2
     for i in range(center):
-        strip.set_pixel(center + i, (color, color, color))
-        strip.set_pixel(center - i - 1, (color, color, color))
+        strip.set_pixel(center + i, color)
+        strip.set_pixel(center - i - 1, color)
         strip.show()
         time.sleep(0.02)
     # Fade out
-    for b in range(color, -1, -15):
+    for b in range(color[0], -1, -15):
         dim_color = (b, b, b)
         strip.fill(dim_color)
         strip.show()
         time.sleep(0.02)
 
 def lightspeed_startup(strip):
-    onoff_sequence(strip, 255)
+    onoff_sequence(strip, (255, 255, 255))
     print("🚀 Lightspeed jump sequence complete")
 
 def shutdown_sequence(strip):
-    onoff_sequence(strip, 150)
+    onoff_sequence(strip, (150, 0, 0))
     print("💤 Vader's fade shutdown complete")
 
 def graceful_exit(signum, frame):
