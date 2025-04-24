@@ -28,14 +28,15 @@ def process_audio_stream():
         "-c", "2", 
         "-r", "44100", 
         "-t", "raw",
-        "--buffer-size=8192"
+        "--buffer-size=8192",
+        "--period-size=2048"
     ]
 
     with subprocess.Popen(cmd, stdout=subprocess.PIPE, bufsize=2048) as proc:
         print("🎙️ Listening with arecord in stereo mode...")
         while True:
             try:
-                data = proc.stdout.read(4096)  # 1024 frames, 2 channels, 16-bit
+                data = proc.stdout.read(8192)  # 1024 frames, 2 channels, 16-bit
                 if not data:
                     continue
                 samples = np.frombuffer(data, dtype=np.int16)
