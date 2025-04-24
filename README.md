@@ -63,6 +63,7 @@ Example:
 ```
 7. Run the app
 ```bash
+sudo python3 led_runner.py
 poetry run uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 

@@ -25,6 +25,7 @@ print(f"🔌 LED runner ({'Simulator' if config.get('use_simulator') else 'Hardw
 
 with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
     server.bind(SOCKET_PATH)
+    os.chmod(SOCKET_PATH, 0o666)
     server.listen()
 
     while True:
