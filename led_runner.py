@@ -84,6 +84,15 @@ with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
                     led_strip.show()
                     print(f"✅ Filled with color {color}")
 
+                elif action == "batch":
+                    pixels = command.get("pixels", [])
+                    for p in pixels:
+                        i = p.get("index")
+                        color = tuple(p.get("color", [0, 0, 0]))
+                        if i is not None:
+                            led_strip.set_pixel(i, color)
+                    print(f"✅ Batch set {len(pixels)} pixels")
+
                 elif action == "set_pixel":
                     i = command.get("index")
                     color = tuple(command.get("color", [0, 0, 0]))
