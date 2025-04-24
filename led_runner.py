@@ -43,18 +43,24 @@ def lightspeed_startup(strip):
     print("🚀 Lightspeed jump sequence complete")
 
 def shutdown_sequence(strip):
-    for pulse in range(3):
-        for b in range(0, 256, 30):
-            strip.fill((b, 0, 0))
-            strip.show()
-            time.sleep(0.02)
-        for b in range(255, -1, -30):
-            strip.fill((b, 0, 0))
-            strip.show()
-            time.sleep(0.02)
+    length = strip.num_leds
+    red = (150, 0, 0)
+    center = length // 2
+    for offset in range(center + 1):
+        if center + offset < length:
+            strip.set_pixel(center + offset, red)
+        if center - offset >= 0:
+            strip.set_pixel(center - offset, red)
+        strip.show()
+        time.sleep(0.02)
+    for b in range(150, -1, -15):
+        fade = (b, 0, 0)
+        strip.fill(fade)
+        strip.show()
+        time.sleep(0.03)
     strip.fill((0, 0, 0))
     strip.show()
-    print("💤 Shutdown sequence complete")
+    print("💤 Vader's fade shutdown complete")
 
 def graceful_exit(signum, frame):
     print("🚦 Shutting down gracefully...")
