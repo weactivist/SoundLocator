@@ -27,7 +27,8 @@ def process_audio_stream():
         "-f", "S16_LE", 
         "-c", "2", 
         "-r", "44100", 
-        "-t", "raw"
+        "-t", "raw",
+        "--buffer-size=8192"
     ]
 
     with subprocess.Popen(cmd, stdout=subprocess.PIPE, bufsize=2048) as proc:
