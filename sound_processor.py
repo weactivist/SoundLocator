@@ -3,9 +3,11 @@ import numpy as np
 import json
 import socket
 import time
+from config.config import load_config, config
+
+load_config()
 
 SOCKET_PATH = "/tmp/led.sock"
-NUM_LEDS = 72
 
 
 def send_led_command(command: dict):
@@ -29,16 +31,16 @@ def stereo_callback(indata, frames, time_info, status):
     left_brightness = min(1.0, left * 20)
     right_brightness = min(1.0, right * 20)
 
-    num_half = NUM_LEDS // 2
+    num_half = config["num_leds"] // 2
 
-    leds = [(0, 0, 0)] * NUM_LEDS
+    leds = [(0, 0, 0)] * config["num_leds"]
 
     left_value = int(255 * left_brightness)
     right_value = int(255 * right_brightness)
 
     for i in range(num_half):
         leds[i] = (left_value, 0, 0)
-    for i in range(num_half, NUM_LEDS):
+    for i in range(num_half, config["num_leds"]):
         leds[i] = (0, 0, right_value)
 
     send_led_command({"action": "fill", "color": [0, 0, 0]})  # Clear first
