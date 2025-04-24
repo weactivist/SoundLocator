@@ -1,13 +1,14 @@
-import sounddevice as sd
 import numpy as np
 import json
 import socket
+import subprocess
 import time
 from config.config import load_config, config
 
 load_config()
 
 SOCKET_PATH = "/tmp/led.sock"
+NUM_LEDS = config["num_leds"]
 
 
 def send_led_command(command: dict):
@@ -19,38 +20,47 @@ def send_led_command(command: dict):
         print(f"⚠️ LED command error: {e}")
 
 
-def stereo_callback(indata, frames, time_info, status):
-    if status:
-        print(f"⚠️ Sound input warning: {status}")
-    if indata.shape[1] < 2:
-        return
+def process_audio_stream():
+    cmd = [
+        "arecord", 
+        "-D", "plughw:1,0",
+        "-f", "S16_LE", 
+        "-c", "2", 
+        "-r", "44100", 
+        "-t", "raw"
+    ]
 
-    left = np.linalg.norm(indata[:, 0])
-    right = np.linalg.norm(indata[:, 1])
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE, bufsize=2048) as proc:
+        print("🎙️ Listening with arecord in stereo mode...")
+        while True:
+            data = proc.stdout.read(4096)  # 1024 frames, 2 channels, 16-bit
+            if not data:
+                continue
+            samples = np.frombuffer(data, dtype=np.int16)
+            stereo = samples.reshape(-1, 2)
+            left = np.linalg.norm(stereo[:, 0])
+            right = np.linalg.norm(stereo[:, 1])
 
-    left_brightness = min(1.0, left * 20)
-    right_brightness = min(1.0, right * 20)
+            left_brightness = min(1.0, left / 10000)
+            right_brightness = min(1.0, right / 10000)
 
-    num_half = config["num_leds"] // 2
+            num_half = NUM_LEDS // 2
+            leds = [(0, 0, 0)] * NUM_LEDS
 
-    leds = [(0, 0, 0)] * config["num_leds"]
+            l_val = int(255 * left_brightness)
+            r_val = int(255 * right_brightness)
 
-    left_value = int(255 * left_brightness)
-    right_value = int(255 * right_brightness)
+            for i in range(num_half):
+                leds[i] = (l_val, 0, 0)
+            for i in range(num_half, NUM_LEDS):
+                leds[i] = (0, 0, r_val)
 
-    for i in range(num_half):
-        leds[i] = (left_value, 0, 0)
-    for i in range(num_half, config["num_leds"]):
-        leds[i] = (0, 0, right_value)
-
-    send_led_command({"action": "fill", "color": [0, 0, 0]})  # Clear first
-    for i, color in enumerate(leds):
-        send_led_command({"action": "set_pixel", "index": i, "color": color})
-    send_led_command({"action": "show"})
+            send_led_command({"action": "fill", "color": [0, 0, 0]})
+            for i, color in enumerate(leds):
+                send_led_command({"action": "set_pixel", "index": i, "color": color})
+            send_led_command({"action": "show"})
+            time.sleep(0.05)
 
 
 if __name__ == "__main__":
-    print("🎙️ Starting sound processor...")
-    with sd.InputStream(channels=2, callback=stereo_callback, samplerate=44100, blocksize=1024):
-        while True:
-            time.sleep(0.1)
+    process_audio_stream()

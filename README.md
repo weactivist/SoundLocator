@@ -1,7 +1,7 @@
 **Project is work in progress! Do not use yet.**
 
 # 🎧 SoundLocator
-SoundLocator is a stereo sound-reactive LED controller powered by FastAPI and running on a Raspberry Pi. It captures audio from a connected PC and visualizes it in real time using a WS2812B LED strip making it ideal for hearing impaired gamers or if you'd like some cool visual audio effects. The system includes a web-based UI and API for controlling brightness, color schemes, and behavior presets
+SoundLocator is a stereo sound-reactive LED controller powered by FastAPI and running on a Raspberry Pi. It captures audio from a connected PC and visualizes it in real time using a WS2812B LED strip making it ideal for hearing impaired gamers or if you'd like some cool visual audio effects. The system includes a web-based UI and API for controlling brightness, color schemes, and behavior presets.
 
 ## 📦 Prerequisites
 - Raspberry Pi with Raspberry Pi OS installed.
@@ -28,7 +28,7 @@ Your LED strip has at least three wires (sometimes five, if duplicated):
 2. Install Git (if not already)
 ```bash
 sudo apt update
-sudo apt install git build-essential libffi-dev python3-dev
+sudo apt install git build-essential libffi-dev python3-dev libportaudio2 libopenblas0
 ```
 3. Clone GitHub repo
 ```bash
@@ -44,7 +44,7 @@ source ~/.bashrc
 
 5. Install dependencies
 ```bash
-poetry run pip install RPi.GPIO
+poetry run pip install RPi.GPIO numpy
 poetry install --with rpi
 sudo /home/pi/.local/bin/poetry add adafruit-circuitpython-neopixel rpi-ws281x
 sudo /home/pi/.local/bin/poetry run pip install RPi.GPIO
