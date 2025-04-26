@@ -15,14 +15,13 @@ else:
 
 SOCKET_PATH = "/tmp/led.sock"
 NUM_LEDS = config["num_leds"]
-BRIGHTNESS_SCALE = config["brightness"] * config["max_brightness"]
 
 # Remove old socket if it exists
 if os.path.exists(SOCKET_PATH):
     os.remove(SOCKET_PATH)
 
 # Initialize the LED strip
-led_strip = Strip(NUM_LEDS, config["brightness"])
+led_strip = Strip(NUM_LEDS, min(config["brightness"], config["max_brightness"]))
 led_strip.fill((0, 0, 0))
 led_strip.show()
 
@@ -33,12 +32,11 @@ def lightspeed_startup(strip):
     length = strip.num_leds
     center = length // 2
     for i in range(center):
-        val = int(255 * BRIGHTNESS_SCALE)
-        strip.set_pixel(center + i, (val, val, val))
-        strip.set_pixel(center - i - 1, (val, val, val))
+        strip.set_pixel(center + i, (255, 255, 255))
+        strip.set_pixel(center - i - 1, (255, 255, 255))
         strip.show()
         time.sleep(0.02)
-    for b in range(val, -1, -15):
+    for b in range(255, -1, -15):
         dim_color = (b, b, b)
         strip.fill(dim_color)
         strip.show()
@@ -50,15 +48,13 @@ def shutdown_sequence(strip):
     length = strip.num_leds
     center = length // 2
     for offset in range(center + 1):
-        val = int(150 * BRIGHTNESS_SCALE)
-        red = (val, 0, 0)
         if center + offset < length:
-            strip.set_pixel(center + offset, red)
+            strip.set_pixel(center + offset, (150, 0, 0))
         if center - offset >= 0:
-            strip.set_pixel(center - offset, red)
+            strip.set_pixel(center - offset, (150, 0, 0))
         strip.show()
         time.sleep(0.02)
-    for b in range(val, -1, -15):
+    for b in range(150, -1, -15):
         fade = (b, 0, 0)
         strip.fill(fade)
         strip.show()

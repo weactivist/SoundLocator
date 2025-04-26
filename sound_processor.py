@@ -11,8 +11,6 @@ load_config()
 
 SOCKET_PATH = "/tmp/led.sock"
 NUM_LEDS = config["num_leds"]
-MAX_BRIGHTNESS = config["max_brightness"]
-CURRENT_BRIGHTNESS = config["brightness"]
 audio_queue = queue.Queue(maxsize=10)
 
 
@@ -61,9 +59,8 @@ def audio_processor():
             left_brightness = min(1.0, left / 10000)
             right_brightness = min(1.0, right / 10000)
 
-            brightness_scale = MAX_BRIGHTNESS * CURRENT_BRIGHTNESS
-            l_val = int(255 * left_brightness * brightness_scale)
-            r_val = int(255 * right_brightness * brightness_scale)
+            l_val = int(255 * left_brightness)
+            r_val = int(255 * right_brightness)
 
             num_half = NUM_LEDS // 2
             leds = [(0, 0, 0)] * NUM_LEDS
