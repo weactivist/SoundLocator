@@ -59,16 +59,16 @@ def audio_processor():
             left_brightness = min(1.0, left / 10000)
             right_brightness = min(1.0, right / 10000)
 
-            l_val = int(255 * left_brightness)
-            r_val = int(255 * right_brightness)
-
             num_half = NUM_LEDS // 2
             leds = [(0, 0, 0)] * NUM_LEDS
 
-            for i in range(num_half):
-                leds[i] = (l_val, 0, 0)
-            for i in range(num_half, NUM_LEDS):
-                leds[i] = (0, 0, r_val)
+            num_left_leds = int(num_half * left_brightness)
+            num_right_leds = int(num_half * right_brightness)
+
+            for i in range(num_left_leds):
+                leds[i] = (255, 0, 0)  # Red for left
+            for i in range(NUM_LEDS - 1, NUM_LEDS - 1 - num_right_leds, -1):
+                leds[i] = (0, 0, 255)  # Blue for right
 
             send_led_command({
                 "action": "batch",
