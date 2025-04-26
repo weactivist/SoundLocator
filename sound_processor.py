@@ -47,10 +47,6 @@ def audio_reader():
                 pass  # Drop if we're behind
 
 
-def interpolate_color(c1, c2, factor):
-    return tuple(int(c1[i] + (c2[i] - c1[i]) * factor) for i in range(3))
-
-
 def audio_processor():
     while True:
         try:
@@ -66,20 +62,29 @@ def audio_processor():
             leds = [(0, 0, 0)] * NUM_LEDS
             center = NUM_LEDS // 2
 
+            # Define thirds
+            left_third = center // 3
+            right_third = center // 3
+
             for i in range(center):
-                factor = i / (center - 1) if center > 1 else 0
+                if i < left_third:
+                    color = (139, 0, 0)  # Dark Red
+                elif i < 2 * left_third:
+                    color = (255, 165, 0)  # Orange
+                else:
+                    color = (128, 0, 128)  # Purple
                 if i / center < left_brightness:
-                    leds[i] = interpolate_color((139, 0, 0), (255, 165, 0), factor)  # Dark Red to Orange
+                    leds[i] = color
 
             for i in range(center, NUM_LEDS):
-                factor = (i - center) / (center - 1) if center > 1 else 0
+                if (NUM_LEDS - i - 1) < right_third:
+                    color = (0, 0, 139)  # Deep Blue
+                elif (NUM_LEDS - i - 1) < 2 * right_third:
+                    color = (0, 255, 255)  # Cyan
+                else:
+                    color = (128, 0, 128)  # Purple
                 if (NUM_LEDS - i) / center < right_brightness:
-                    leds[i] = interpolate_color((0, 255, 255), (0, 0, 139), factor)  # Cyan to Deep Blue
-
-            # Handle center area
-            if left_brightness > 0 and right_brightness > 0:
-                leds[center - 1] = (128, 0, 128)  # Purple
-                leds[center] = (128, 0, 128)  # Purple
+                    leds[i] = color
 
             send_led_command({
                 "action": "batch",
