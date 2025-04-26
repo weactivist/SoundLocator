@@ -76,13 +76,17 @@ sudo systemctl enable led-runner.service
 sudo systemctl enable soundlocator-api.service
 ```
 
-9. Start services
+9. Start services (API docs available at: http://<ip_address>:8000/docs)
 ```
 sudo systemctl start led-runner.service
 sudo systemctl start soundlocator-api.service
 ```
 
-API docs available at: http://<ip_address>:8000/docs
+10. Restart services
+```
+sudo systemctl restart led-runner.service
+sudo systemctl restart soundlocator-api.service
+```
 
 ## 🧑‍💻 To pull future updates
 ```
