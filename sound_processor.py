@@ -62,14 +62,16 @@ def audio_processor():
             leds = [(0, 0, 0)] * NUM_LEDS
             center = NUM_LEDS // 2
 
-            # Define thirds
-            left_third = center // 3
-            right_third = center // 3
+            # Define quarters
+            left_quarter = center // 4
+            right_quarter = center // 4
 
             for i in range(center):
-                if i < left_third:
+                if i < left_quarter:
                     color = (139, 0, 0)  # Dark Red
-                elif i < 2 * left_third:
+                elif i < 2 * left_quarter:
+                    color = (255, 69, 0)  # Red-Orange (new color)
+                elif i < 3 * left_quarter:
                     color = (255, 165, 0)  # Orange
                 else:
                     color = (128, 0, 128)  # Purple
@@ -77,9 +79,11 @@ def audio_processor():
                     leds[i] = color
 
             for i in range(center, NUM_LEDS):
-                if (NUM_LEDS - i - 1) < right_third:
+                if (NUM_LEDS - i - 1) < right_quarter:
                     color = (0, 0, 139)  # Deep Blue
-                elif (NUM_LEDS - i - 1) < 2 * right_third:
+                elif (NUM_LEDS - i - 1) < 2 * right_quarter:
+                    color = (0, 0, 255)  # Blue
+                elif (NUM_LEDS - i - 1) < 3 * right_quarter:
                     color = (0, 255, 255)  # Cyan
                 else:
                     color = (128, 0, 128)  # Purple
