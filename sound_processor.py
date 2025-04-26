@@ -47,6 +47,10 @@ def audio_reader():
                 pass  # Drop if we're behind
 
 
+def interpolate_color(c1, c2, factor):
+    return tuple(int(c1[i] + (c2[i] - c1[i]) * factor) for i in range(3))
+
+
 def audio_processor():
     while True:
         try:
@@ -59,24 +63,23 @@ def audio_processor():
             left_brightness = min(1.0, left / 10000)
             right_brightness = min(1.0, right / 10000)
 
-            num_half = NUM_LEDS // 2
             leds = [(0, 0, 0)] * NUM_LEDS
+            center = NUM_LEDS // 2
 
-            num_left_leds = int(num_half * left_brightness)
-            num_right_leds = int(num_half * right_brightness)
+            for i in range(center):
+                factor = i / (center - 1) if center > 1 else 0
+                if i / center < left_brightness:
+                    leds[i] = interpolate_color((139, 0, 0), (255, 165, 0), factor)  # Dark Red to Orange
 
-            for i in range(num_half):
-                if i < num_left_leds:
-                    leds[i] = (255, 0, 0)  # Red for left
-                if (NUM_LEDS - 1 - i) >= num_half and (i < num_right_leds):
-                    leds[NUM_LEDS - 1 - i] = (0, 0, 255)  # Blue for right
+            for i in range(center, NUM_LEDS):
+                factor = (i - center) / (center - 1) if center > 1 else 0
+                if (NUM_LEDS - i) / center < right_brightness:
+                    leds[i] = interpolate_color((0, 255, 255), (0, 0, 139), factor)  # Cyan to Deep Blue
 
-            # Handle overlapping center region (purple)
-            center_left = num_half - num_left_leds
-            center_right = num_half + num_right_leds
-            for i in range(center_left, center_right):
-                if 0 <= i < NUM_LEDS:
-                    leds[i] = (128, 0, 128)  # Purple where overlap happens
+            # Handle center area
+            if left_brightness > 0 and right_brightness > 0:
+                leds[center - 1] = (128, 0, 128)  # Purple
+                leds[center] = (128, 0, 128)  # Purple
 
             send_led_command({
                 "action": "batch",
