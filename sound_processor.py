@@ -56,14 +56,8 @@ def audio_processor():
             left = np.linalg.norm(stereo[:, 0])
             right = np.linalg.norm(stereo[:, 1])
 
-            # Threshold to ignore very small noise
-            SILENCE_THRESHOLD = 0.02  # You can tweak this value!
-
-            if left_brightness < SILENCE_THRESHOLD:
-                left_brightness = 0.0
-            if right_brightness < SILENCE_THRESHOLD:
-                right_brightness = 0.0
-
+            left_brightness = min(1.0, (left / 10000) ** 0.5)
+            right_brightness = min(1.0, (right / 10000) ** 0.5)
 
             leds = [(0, 0, 0)] * NUM_LEDS
             center = NUM_LEDS // 2
