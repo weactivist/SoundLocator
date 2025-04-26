@@ -65,10 +65,18 @@ def audio_processor():
             num_left_leds = int(num_half * left_brightness)
             num_right_leds = int(num_half * right_brightness)
 
-            for i in range(num_left_leds):
-                leds[i] = (255, 0, 0)  # Red for left
-            for i in range(NUM_LEDS - 1, NUM_LEDS - 1 - num_right_leds, -1):
-                leds[i] = (0, 0, 255)  # Blue for right
+            for i in range(num_half):
+                if i < num_left_leds:
+                    leds[i] = (255, 0, 0)  # Red for left
+                if (NUM_LEDS - 1 - i) >= num_half and (i < num_right_leds):
+                    leds[NUM_LEDS - 1 - i] = (0, 0, 255)  # Blue for right
+
+            # Handle overlapping center region (purple)
+            center_left = num_half - num_left_leds
+            center_right = num_half + num_right_leds
+            for i in range(center_left, center_right):
+                if 0 <= i < NUM_LEDS:
+                    leds[i] = (128, 0, 128)  # Purple where overlap happens
 
             send_led_command({
                 "action": "batch",
