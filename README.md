@@ -67,6 +67,7 @@ Example:
 ```bash
 sudo cp systemd/led-runner.service /etc/systemd/system/
 sudo cp systemd/soundlocator-api.service /etc/systemd/system/
+sudo cp systemd/sound-processor.service /etc/systemd/system/
 ```
 
 8. Reload systemd and enable services
@@ -74,18 +75,21 @@ sudo cp systemd/soundlocator-api.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable led-runner.service
 sudo systemctl enable soundlocator-api.service
+sudo systemctl enable sound-processor.service
 ```
 
 9. Start services (API docs available at: http://<ip_address>:8000/docs)
 ```
 sudo systemctl start led-runner.service
 sudo systemctl start soundlocator-api.service
+sudo systemctl start sound-processor.service
 ```
 
 10. Restart services
 ```
 sudo systemctl restart led-runner.service
 sudo systemctl restart soundlocator-api.service
+sudo systemctl restart sound-processor.service
 ```
 
 ## 🧑‍💻 To pull future updates

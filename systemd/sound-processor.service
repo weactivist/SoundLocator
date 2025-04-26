@@ -1,0 +1,16 @@
+[Unit]
+Description=SoundLocator Sound Processor Service
+After=network.target sound.target soundlocator-led.service
+Requires=soundlocator-led.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi/soundlocator
+ExecStartPre=/bin/bash -c 'while [ ! -e /tmp/led.sock ]; do sleep 0.5; done'
+ExecStart=/home/pi/.local/bin/poetry run python sound_processor.py
+Restart=always
+User=pi
+Environment="PATH=/home/pi/.local/bin:/usr/bin:/bin"
+
+[Install]
+WantedBy=multi-user.target
