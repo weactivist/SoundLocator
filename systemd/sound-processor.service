@@ -1,7 +1,7 @@
 [Unit]
 Description=SoundLocator Sound Processor Service
-After=network.target sound.target soundlocator-led.service
-Requires=soundlocator-led.service
+Requires=led-runner.service
+After=led-runner.service
 
 [Service]
 Type=simple
