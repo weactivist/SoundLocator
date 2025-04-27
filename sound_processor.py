@@ -68,12 +68,13 @@ def audio_processor():
             else:
                 right_brightness = min(1.0, (right / 10000) ** 0.5)
 
-            leds = [(0, 0, 0)] * NUM_LEDS
             center = NUM_LEDS // 2
 
             # Calculate number of LEDs to light per side
             left_leds_to_light = int(left_brightness * center)
             right_leds_to_light = int(right_brightness * center)
+
+            leds = [(0, 0, 0)] * NUM_LEDS
 
             # Define quarters
             left_quarter = center // 4
