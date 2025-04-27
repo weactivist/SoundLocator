@@ -49,6 +49,7 @@ def set_brightness(value: float = Body(..., embed=True)):
     value = min(value, config["max_brightness"])
     config["brightness"] = value
     save_config()
+    send_command_to_led_runner({"action": "config", "brightness": value})
     return {"brightness": value}
 
 

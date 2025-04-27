@@ -121,6 +121,10 @@ with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
 
                 elif action == "show":
                     led_strip.show()
+                
+                elif action == "config":
+                    load_config()
+                    led_strip = Strip(NUM_LEDS, min(config["brightness"], config["max_brightness"]))
 
             except Exception as e:
                 print(f"⚠️ Error processing command: {e}")
