@@ -13,7 +13,7 @@ SOCKET_PATH = "/tmp/led.sock"
 NUM_LEDS = config["num_leds"]
 audio_queue = queue.Queue(maxsize=10)
 
-RAW_SILENCE_THRESHOLD = 300
+RAW_SILENCE_THRESHOLD = 500
 
 
 def send_led_command(command: dict):
@@ -57,8 +57,6 @@ def audio_processor():
             stereo = samples.reshape(-1, 2)
             left = np.linalg.norm(stereo[:, 0])
             right = np.linalg.norm(stereo[:, 1])
-
-            print(left)
 
             if left < RAW_SILENCE_THRESHOLD:
                 left_brightness = 0.0
