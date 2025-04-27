@@ -111,7 +111,6 @@ def audio_processor():
                 ]
             })
             send_led_command({"action": "show"})
-            time.sleep(0.1)
 
         except queue.Empty:
             continue
