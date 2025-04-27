@@ -79,38 +79,34 @@ def audio_processor():
             left_quarter = center // 4
             right_quarter = center // 4
 
-            if left_leds_to_light == 0 and right_leds_to_light == 0:
-                leds = [(0, 0, 0)] * NUM_LEDS  # Force clear if silent
-            else:
+            if left_leds_to_light > 0 or right_leds_to_light > 0:
                 for i in range(center):
                     if i < left_leds_to_light:
                         if i < left_quarter:
-                            color = (139, 0, 0)  # Dark Red
+                            leds[i] = (139, 0, 0)  # Dark Red
                         elif i < 2 * left_quarter:
-                            color = (255, 69, 0)  # Red-Orange
+                            leds[i] = (255, 69, 0)  # Red-Orange
                         elif i < 3 * left_quarter:
-                            color = (255, 165, 0)  # Orange
+                            leds[i] = (255, 165, 0)  # Orange
                         else:
-                            color = (128, 0, 128)  # Purple
-                        leds[i] = color
+                            leds[i] = (128, 0, 128)  # Purple
 
                 for i in range(center, NUM_LEDS):
                     if (NUM_LEDS - 1 - i) < right_leds_to_light:
                         if (NUM_LEDS - i - 1) < right_quarter:
-                            color = (0, 0, 139)  # Deep Blue
+                            leds[i] = (0, 0, 139)  # Deep Blue
                         elif (NUM_LEDS - i - 1) < 2 * right_quarter:
-                            color = (0, 0, 255)  # Blue
+                            leds[i] = (0, 0, 255)  # Blue
                         elif (NUM_LEDS - i - 1) < 3 * right_quarter:
-                            color = (0, 255, 255)  # Cyan
+                            leds[i] = (0, 255, 255)  # Cyan
                         else:
-                            color = (128, 0, 128)  # Purple
-                        leds[i] = color
+                            leds[i] = (128, 0, 128)  # Purple
 
             send_led_command({
                 "action": "batch",
                 "pixels": [
-                    {"index": i, "color": color}
-                    for i, color in enumerate(leds)
+                    {"index": i, "color": leds[i]}
+                    for i in range(NUM_LEDS)
                 ]
             })
             send_led_command({"action": "show"})
