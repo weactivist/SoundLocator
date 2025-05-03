@@ -6,6 +6,7 @@ import time
 import threading
 import queue
 from config.config import load_config, config
+from presets import PRESETS
 
 load_config()
 
@@ -50,6 +51,11 @@ def audio_reader():
 
 
 def audio_processor():
+    preset_name = config.get("preset", "default")
+    preset = PRESETS.get(preset_name, PRESETS["default"])
+    behavior_func = preset["behavior"]
+    color_scheme = preset["colors"]
+
     while True:
         try:
             data = audio_queue.get(timeout=1)
@@ -59,40 +65,8 @@ def audio_processor():
             right = np.linalg.norm(stereo[:, 1])
             left_brightness = 0.0 if left < RAW_SILENCE_THRESHOLD else min(1.0, (left / 10000))
             right_brightness = 0.0 if right < RAW_SILENCE_THRESHOLD else min(1.0, (right / 10000))
-            center = NUM_LEDS // 2
 
-            # Calculate number of LEDs to light per side
-            left_leds_to_light = int(left_brightness * center)
-            right_leds_to_light = int(right_brightness * center)
-
-            leds = [(0, 0, 0)] * NUM_LEDS
-
-            # Define quarters
-            left_quarter = center // 4
-            right_quarter = center // 4
-
-            if left_leds_to_light > 0 or right_leds_to_light > 0:
-                for i in range(center):
-                    if i < left_leds_to_light:
-                        if i < left_quarter:
-                            leds[i] = (139, 0, 0)  # Dark Red
-                        elif i < 2 * left_quarter:
-                            leds[i] = (255, 69, 0)  # Red-Orange
-                        elif i < 3 * left_quarter:
-                            leds[i] = (255, 165, 0)  # Orange
-                        else:
-                            leds[i] = (128, 0, 128)  # Purple
-
-                for i in range(center, NUM_LEDS):
-                    if (NUM_LEDS - 1 - i) < right_leds_to_light:
-                        if (NUM_LEDS - i - 1) < right_quarter:
-                            leds[i] = (0, 0, 139)  # Deep Blue
-                        elif (NUM_LEDS - i - 1) < 2 * right_quarter:
-                            leds[i] = (0, 0, 255)  # Blue
-                        elif (NUM_LEDS - i - 1) < 3 * right_quarter:
-                            leds[i] = (0, 255, 255)  # Cyan
-                        else:
-                            leds[i] = (128, 0, 128)  # Purple
+            leds = behavior_func(left_brightness, right_brightness, NUM_LEDS, color_scheme)
 
             send_led_command({
                 "action": "batch",
