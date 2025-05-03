@@ -57,17 +57,8 @@ def audio_processor():
             stereo = samples.reshape(-1, 2)
             left = np.linalg.norm(stereo[:, 0])
             right = np.linalg.norm(stereo[:, 1])
-
-            if left < RAW_SILENCE_THRESHOLD:
-                left_brightness = 0.0
-            else:
-                left_brightness = min(1.0, (left / 10000) ** 0.5)
-
-            if right < RAW_SILENCE_THRESHOLD:
-                right_brightness = 0.0
-            else:
-                right_brightness = min(1.0, (right / 10000) ** 0.5)
-
+            left_brightness = 0.0 if left < RAW_SILENCE_THRESHOLD else min(1.0, (left / 10000))
+            right_brightness = 0.0 if right < RAW_SILENCE_THRESHOLD else min(1.0, (right / 10000))
             center = NUM_LEDS // 2
 
             # Calculate number of LEDs to light per side
