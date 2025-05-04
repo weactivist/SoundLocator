@@ -65,6 +65,15 @@ def set_pixel(index: int = Body(...), color: tuple = Body(...)):
     return {"status": "pixel_set", "index": index, "color": color}
 
 
+@app.post("/preset")
+def set_preset(value: str = Body(..., embed=True)):
+    value = min(value, config["preset"])
+    config["preset"] = value
+    save_config()
+    send_command_to_led_runner({"action": "config", "preset": value})
+    return {"preset": value}
+
+
 @app.post("/clear")
 def clear_strip():
     send_command_to_led_runner({"action": "clear"})
@@ -78,5 +87,6 @@ def get_state():
         "max_brightness": config["max_brightness"],
         "num_leds": config["num_leds"],
         "use_simulator": config.get("use_simulator", True),
+        "preset": config["preset"],
         "led_runner_active": check_led_runner()
     }
