@@ -27,7 +27,7 @@ def directional_sweep():
         leds = [(0, 0, 0)] * num_leds
         total_volume = left_brightness + right_brightness
 
-        if total_volume < 0.001:
+        if total_volume < 0.0001:
             smoothed_index[0] = None
             return leds
 
@@ -43,8 +43,15 @@ def directional_sweep():
                 smoothed_index[0] * (1 - alpha) + target_index * alpha
             )
 
-        color = color_scheme[len(color_scheme) // 2]
-        leds[smoothed_index[0]] = color
+        # Light up multiple LEDs based on color scheme length
+        color_count = len(color_scheme)
+        half_span = color_count // 2
+
+        for offset, color in enumerate(color_scheme):
+            index = smoothed_index[0] - half_span + offset
+            if 0 <= index < num_leds:
+                leds[index] = color
+
         return leds
 
     return behavior
