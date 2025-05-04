@@ -18,3 +18,20 @@ def default_behavior(left_brightness, right_brightness, num_leds, color_scheme):
         leds[-(i + 1)] = color_scheme[-(color_idx + 1)]
 
     return leds
+
+
+def directional_sweep(left_brightness, right_brightness, num_leds, color_scheme):
+    leds = [(0, 0, 0)] * num_leds
+    total_volume = left_brightness + right_brightness
+
+    if total_volume < 0.01:
+        return leds  # Silence, keep all off
+
+    direction_ratio = left_brightness / total_volume
+    index = int(direction_ratio * (num_leds - 1))
+
+    # Choose a color — middle of the scheme
+    color = color_scheme[len(color_scheme) // 2]
+    leds[index] = color
+
+    return leds

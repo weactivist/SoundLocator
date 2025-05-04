@@ -8,8 +8,7 @@ default_config = {
     "num_leds": 72,  # Number of LEDs on the strip.
     "brightness": 0.1,  # Set initial brightness. Default is 10%.
     "max_brightness": 0.1,  # Max brightness. Default is 10%. Warning: Calculate how much power you have to run the strips.
-    "color_scheme": "default",  # Set color scheme.
-    "behavior": "full_react",  # Set behavior.
+    "preset": "default",  # Set color scheme.
     "use_simulator": False  # Use terminal simulation of LED lights. Hardware strip by default.
 }
 
