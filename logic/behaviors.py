@@ -23,10 +23,6 @@ def default_behavior(left_brightness, right_brightness, num_leds, color_scheme):
 def directional_sweep(left_brightness, right_brightness, num_leds, color_scheme):
     leds = [(0, 0, 0)] * num_leds
     total_volume = left_brightness + right_brightness
-
-    if total_volume < 0.01:
-        return leds  # Silence, keep all off
-
     direction_ratio = right_brightness / total_volume  # flipped left/right
     index = int(direction_ratio * (num_leds - 1))
 
