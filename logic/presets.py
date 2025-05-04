@@ -1,5 +1,5 @@
-from color_schemes import COLOR_SCHEMES
-from behaviors import default_behavior
+from .color_schemes import COLOR_SCHEMES
+from .behaviors import default_behavior
 
 PRESETS = {
     "default": {
