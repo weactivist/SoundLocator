@@ -27,7 +27,7 @@ def directional_sweep(left_brightness, right_brightness, num_leds, color_scheme)
     if total_volume < 0.01:
         return leds  # Silence, keep all off
 
-    direction_ratio = left_brightness / total_volume
+    direction_ratio = right_brightness / total_volume  # flipped left/right
     index = int(direction_ratio * (num_leds - 1))
 
     # Choose a color — middle of the scheme
