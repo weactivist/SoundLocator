@@ -8,6 +8,6 @@ PRESETS = {
     },
     "directional_sweep": {
         "colors": COLOR_SCHEMES["default"],
-        "behavior": directional_sweep,
+        "behavior": directional_sweep(),
     },
 }

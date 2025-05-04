@@ -20,14 +20,31 @@ def default_behavior(left_brightness, right_brightness, num_leds, color_scheme):
     return leds
 
 
-def directional_sweep(left_brightness, right_brightness, num_leds, color_scheme):
-    leds = [(0, 0, 0)] * num_leds
-    total_volume = left_brightness + right_brightness
-    direction_ratio = right_brightness / total_volume  # flipped left/right
-    index = int(direction_ratio * (num_leds - 1))
+def directional_sweep():
+    smoothed_index = [None]  # mutable container for stateful closure
 
-    # Choose a color — middle of the scheme
-    color = color_scheme[len(color_scheme) // 2]
-    leds[index] = color
+    def behavior(left_brightness, right_brightness, num_leds, color_scheme):
+        leds = [(0, 0, 0)] * num_leds
+        total_volume = left_brightness + right_brightness
 
-    return leds
+        if total_volume < 0.001:
+            smoothed_index[0] = None
+            return leds
+
+        direction_ratio = right_brightness / total_volume  # flipped left/right
+        target_index = int(direction_ratio * (num_leds - 1))
+
+        # Exponential smoothing
+        alpha = 0.3  # 0 = very smooth, 1 = no smoothing
+        if smoothed_index[0] is None:
+            smoothed_index[0] = target_index
+        else:
+            smoothed_index[0] = int(
+                smoothed_index[0] * (1 - alpha) + target_index * alpha
+            )
+
+        color = color_scheme[len(color_scheme) // 2]
+        leds[smoothed_index[0]] = color
+        return leds
+
+    return behavior
