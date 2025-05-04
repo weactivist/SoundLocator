@@ -6,7 +6,7 @@ import time
 import threading
 import queue
 from config.config import load_config, config
-from presets import PRESETS
+from logic.presets import PRESETS
 
 load_config()
 
