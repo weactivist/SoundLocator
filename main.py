@@ -4,6 +4,8 @@ import json
 import os
 from fastapi import FastAPI, Body, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from config.config import load_config, save_config, config
 
 SOCKET_PATH = "/tmp/led.sock"
@@ -37,6 +39,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.mount("/ui", StaticFiles(directory="frontend/dist", html=True), name="ui")
+
+@app.get("/")
+def root():
+    return FileResponse(os.path.join("frontend", "dist", "index.html"))
 
 
 @app.get("/brightness")
