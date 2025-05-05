@@ -7,7 +7,7 @@ PRESETS = {
         "behavior": default_behavior,
     },
     "directional_sweep": {
-        "colors": COLOR_SCHEMES["default"],
+        "colors": COLOR_SCHEMES["directional_sweep"],
         "behavior": directional_sweep(),
     },
 }
