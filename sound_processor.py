@@ -55,6 +55,7 @@ def audio_processor():
     preset = PRESETS.get(preset_name, PRESETS["default"])
     behavior_func = preset["behavior"]
     color_scheme = preset["colors"]
+    volume_peak = 1000
 
     while True:
         try:
@@ -63,9 +64,9 @@ def audio_processor():
             stereo = samples.reshape(-1, 2)
             left = np.linalg.norm(stereo[:, 0])
             right = np.linalg.norm(stereo[:, 1])
-            if volume_peak < max(1000, left, right):
-                volume_peak = max(1000, left, right)
-            print(max(left, right))
+            if volume_peak < max(left, right):
+                volume_peak = max(left, right)
+            print(volume_peak)
             left_brightness = 0.0 if left < RAW_SILENCE_THRESHOLD else min(1.0, (left / volume_peak))
             right_brightness = 0.0 if right < RAW_SILENCE_THRESHOLD else min(1.0, (right / volume_peak))
 
