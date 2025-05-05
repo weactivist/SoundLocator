@@ -63,7 +63,8 @@ def audio_processor():
             stereo = samples.reshape(-1, 2)
             left = np.linalg.norm(stereo[:, 0])
             right = np.linalg.norm(stereo[:, 1])
-            volume_peak = max(1000, left, right)
+            if volume_peak < max(1000, left, right):
+                volume_peak = max(1000, left, right)
             print(max(left, right))
             left_brightness = 0.0 if left < RAW_SILENCE_THRESHOLD else min(1.0, (left / volume_peak))
             right_brightness = 0.0 if right < RAW_SILENCE_THRESHOLD else min(1.0, (right / volume_peak))
