@@ -2,6 +2,7 @@
 import socket
 import json
 import os
+import subprocess
 from fastapi import FastAPI, Body, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -103,3 +104,8 @@ def get_state():
 @app.get("/config")
 def get_config():
     return config
+
+@app.post("/shutdown")
+def shutdown():
+    subprocess.Popen(["sudo", "shutdown", "now"])
+    return {"status": "Shutting down"}

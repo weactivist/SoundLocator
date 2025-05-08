@@ -21,6 +21,14 @@ export default function App() {
     axios.post('/config', config);
   };
 
+  const shutdown = () => {
+    axios.post('/shutdown').then(() => {
+      alert("🛑 Raspberry Pi is shutting down...");
+    }).catch(() => {
+      alert("❌ Shutdown command failed");
+    });
+  };
+
   if (loading) return <div className="p-4">Loading config...</div>;
 
   return (
@@ -79,12 +87,21 @@ export default function App() {
         </select>
       </div>
 
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-        onClick={save}
-      >
-        Save Changes
-      </button>
+      <div className="space-x-4">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={save}
+        >
+          Save Changes
+        </button>
+
+        <button
+          className="bg-red-500 text-white px-4 py-2 rounded"
+          onClick={shutdown}
+        >
+          Shutdown
+        </button>
+      </div>
     </div>
   );
 }
