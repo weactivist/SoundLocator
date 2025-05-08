@@ -41,7 +41,7 @@ app.add_middleware(
 )
 
 
-app.mount("/ui", StaticFiles(directory="frontend/dist", html=True), name="ui")
+app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="ui")
 
 @app.get("/")
 def root():
