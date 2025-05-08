@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000';
 
 export default function App() {
   const [config, setConfig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${API_BASE}/config`).then((res) => {
+    axios.get('/config').then((res) => {
       setConfig(res.data);
       setLoading(false);
     });
@@ -19,7 +18,7 @@ export default function App() {
   };
 
   const save = () => {
-    axios.post(`${API_BASE}/config`, config);
+    axios.post('/config', config);
   };
 
   if (loading) return <div className="p-4">Loading config...</div>;
