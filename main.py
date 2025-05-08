@@ -102,4 +102,4 @@ def get_state():
 
 @app.get("/config")
 def get_config():
-    return load_config()
+    return config
