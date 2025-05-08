@@ -41,7 +41,7 @@ app.add_middleware(
 )
 
 
-app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="ui")
+app.mount("/ui", StaticFiles(directory="frontend/dist", html=True), name="ui")
 
 @app.get("/")
 def root():
@@ -99,3 +99,7 @@ def get_state():
         "preset": config["preset"],
         "led_runner_active": check_led_runner()
     }
+
+@app.get("/config")
+def get_config():
+    return load_config()
