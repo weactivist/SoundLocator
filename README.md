@@ -102,3 +102,10 @@ poetry install --with rpi
 Add `"use_simulator": true` to `config/config.json` to simulate the LEDs in a terminal window.
 
 Start the app: `poetry run uvicorn main:app --reload`
+
+### Build frontend
+```
+cd ./frontend
+npm install
+npm run build
+```
